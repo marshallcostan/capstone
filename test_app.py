@@ -41,18 +41,6 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.casting_director = {'Authorization': 'Bearer {}'.format(os.environ['CASTING_DIRECTOR_JWT'])}
         self.casting_assistant = {'Authorization': 'Bearer {}'.format(os.environ['ASSISTANT_JWT'])}
 
-    def tearDown(self):
-        pass
-        # print("teardown")
-        # self.app = create_app()
-        # self.client = self.app.test_client
-        # self.database_name = "capstone"
-        # self.database_path = 'postgres://marshall@localhost:5432/{}'.format(self.database_name)
-        # print('next dropdb')
-        # drop_db(self.app, self.database_path)
-        # print("teardown complete")
-        # """Executed after reach test"""
-
     def test001_create_new_actor_by_casting_director(self):
         print("1")
         res = self.client().post('/actor', headers=self.casting_director, json=self.new_actor)
@@ -202,8 +190,8 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 403)
         self.assertEqual(data['description'], "Permission not found.")
 
-    def test016_delete_movie_by_executive_producer_no_bearer(self):
-        print("16")
+    def test017_delete_movie_by_executive_producer_no_bearer(self):
+        print("17")
         self.client().post('/movie', headers=self.executive_producer, json=self.new_movie)
         res = self.client().delete('/movie/1', headers=self.executive_producer_no_bearer)
         data = json.loads(res.data)
