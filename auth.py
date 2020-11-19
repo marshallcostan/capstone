@@ -7,8 +7,12 @@ from urllib.request import urlopen
 
 
 AUTH0_DOMAIN = os.environ['AUTH0_DOMAIN']
+print(f"AUTH0_DOMAIN {AUTH0_DOMAIN}")
 ALGORITHMS = os.environ['ALGORITHMS']
+print(f"ALGORITHMS {ALGORITHMS}")
 API_AUDIENCE = os.environ['API_AUDIENCE']
+print(f'API_AUDIENCE {API_AUDIENCE}')
+
 
 # AuthError Exception-----------
 
