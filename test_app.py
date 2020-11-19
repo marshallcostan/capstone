@@ -2,7 +2,7 @@ import os
 import unittest
 import json
 from app import create_app
-from models import setup_db, drop_db, Actor, Movie
+from models import setup_db, Actor, Movie
 
 
 class CastingAgencyTestCase(unittest.TestCase):
@@ -13,12 +13,16 @@ class CastingAgencyTestCase(unittest.TestCase):
         """Define test variables and initialize app."""
         self.app = create_app()
         self.client = self.app.test_client
-        # self.database_name = "capstone"
-        self.database_path = 'postgres://axeilwbzlngriy:f8ad5d1c32b94cfaa2dba511db848252a3fd3ced4d849afe015bb3f1d5bc499' \
-                             'e@ec2-3-216-89-250.compute-1.amazonaws.com:5432/deasp0q7afpl7e'
-        # self.database_path = 'postgres://marshall@localhost:5432/{}'.format(self.database_name)
-        setup_db(self.app, self.database_path)
 
+        """For local deployment"""
+        self.database_name = "capstone"
+        self.database_path = 'postgres://marshall@localhost:5432/{}'.format(self.database_name)
+
+        # """For Heroku deployment"""
+        # self.database_path = os.environ.get('DATABASE_URL')
+        # setup_db(self.app, self.database_path)
+
+        """Test Data"""
         self.new_actor = {
             'name': 'Jonah Hill',
             'age': 37,
@@ -37,6 +41,13 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.movie_update = {
             'release_date': '9/20/2008'
         }
+
+        self.new_cast = {
+            "movie_id": 2,
+            "actor_id": 2
+        }
+
+        """Tokens"""
 
         self.executive_producer = {'Authorization': 'Bearer {}'.format(os.environ['EXECUTIVE_JWT'])}
         self.executive_producer_no_bearer = {'Authorization': '{}'.format(os.environ['EXECUTIVE_JWT'])}
@@ -200,6 +211,27 @@ class CastingAgencyTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 401)
         self.assertEqual(data['description'], 'Authorization header must start with "Bearer".')
+
+    def test018_create_cast(self):
+        print("18")
+        self.client().post('/movie', headers=self.executive_producer, json=self.new_movie)
+        self.client().post('/actor', headers=self.executive_producer, json=self.new_actor)
+        res = self.client().post('/casting', headers=self.executive_producer, json=self.new_cast)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+
+    def test019_404_create_cast(self):
+        print("19")
+        self.client().post('/movie', headers=self.executive_producer, json=self.new_movie)
+        self.client().post('/actor', headers=self.executive_producer, json=self.new_actor)
+        res = self.client().post('/casting', headers=self.executive_producer, json={'movie_id': 8, 'actor_id': 2})
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'resource not found')
 
 
 # Make the tests conveniently executable

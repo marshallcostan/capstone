@@ -4,11 +4,15 @@ from models import *
 from auth import AuthError, requires_auth
 
 
+# --------App Initialization----------------
+
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)
     setup_db(app)
     CORS(app)
+
+# -------Endpoints----------------------
 
     @app.route('/actors')
     @requires_auth('get:actors')
@@ -128,12 +132,6 @@ def create_app(test_config=None):
             else:
                 abort(400)
 
-            # actor.name = body['name']
-            # actor.age = body['age']
-            # actor.gender = body['gender']
-
-
-
             actor.update()
 
             return jsonify({
@@ -164,8 +162,38 @@ def create_app(test_config=None):
                 'success': True,
                 'updated': movie.format()
             })
+
         except():
             abort(400)
+
+    @app.route('/casting', methods=['POST'])
+    @requires_auth('post:cast')
+    def create_cast():
+        try:
+            body = request.get_json()
+
+            movie_id = body['movie_id']
+            actor_id = body['actor_id']
+
+            movie = Movie.query.get(movie_id)
+            if movie is None:
+                abort(404)
+
+            actor = Actor.query.get(actor_id)
+            if actor is None:
+                abort(404)
+
+            movie.cast.append(actor)
+            movie.update()
+
+            return jsonify({
+                'success': True,
+                'cast member added': f" {actor.name} added to the {movie.title} cast."
+            })
+        except():
+            abort(400)
+
+# -------Error Handling--------------------
 
     @app.errorhandler(400)
     def bad_request(error):
