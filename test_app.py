@@ -13,8 +13,6 @@ class CastingAgencyTestCase(unittest.TestCase):
         """Define test variables and initialize app."""
         self.app = create_app()
         self.client = self.app.test_client
-
-        """For local deployment"""
         self.database_path = os.environ['DATABASE_URL']
 
         """Test Data"""
