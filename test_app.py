@@ -2,7 +2,7 @@ import os
 import unittest
 import json
 from app import create_app
-from models import setup_db, Actor, Movie
+from models import Actor, Movie
 
 
 class CastingAgencyTestCase(unittest.TestCase):
@@ -15,12 +15,7 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.client = self.app.test_client
 
         """For local deployment"""
-        self.database_name = "capstone"
-        self.database_path = 'postgres://marshall@localhost:5432/{}'.format(self.database_name)
-
-        # """For Heroku deployment"""
-        # self.database_path = os.environ.get('DATABASE_URL')
-        # setup_db(self.app, self.database_path)
+        self.database_path = os.environ['DATABASE_URL']
 
         """Test Data"""
         self.new_actor = {
@@ -53,6 +48,8 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.executive_producer_no_bearer = {'Authorization': '{}'.format(os.environ['EXECUTIVE_JWT'])}
         self.casting_director = {'Authorization': 'Bearer {}'.format(os.environ['CASTING_DIRECTOR_JWT'])}
         self.casting_assistant = {'Authorization': 'Bearer {}'.format(os.environ['ASSISTANT_JWT'])}
+
+    """Tests"""
 
     def test001_create_new_actor_by_casting_director(self):
         print("1")

@@ -93,7 +93,7 @@ def create_app(test_config=None):
                 'success': True,
                 'created': Actor.format(new_actor)
             })
-        except:
+        except():
             abort(422)
 
     @app.route('/movie', methods=["POST"])
@@ -112,7 +112,7 @@ def create_app(test_config=None):
                 'success': True,
                 'created': Movie.format(new_movie)
             })
-        except:
+        except():
             abort(422)
 
     @app.route('/actor/<int:id>', methods=['PATCH'])
