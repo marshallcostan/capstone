@@ -4,7 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 # database_name = "capstone"
 # database_path = 'postgres://marshall@localhost:5432/{}'.format(database_name)
-database_path = os.environ.get('DATABASE_URL')
+# database_path = os.environ.get('DATABASE_URL')
+database_path = "postgres://udjyckurdsxnhd:9e2f85b5f6ecf8cbbdf079cae6ad9f6d0f1a658bf8d091a33b9331b0deeb5b3b@ec2-52-5-176-53.compute-1.amazonaws.com:5432/ddvb311svjnhr"
 
 
 db = SQLAlchemy()
