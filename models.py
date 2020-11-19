@@ -2,8 +2,9 @@ import os
 from sqlalchemy import Column, String, Integer
 from flask_sqlalchemy import SQLAlchemy
 
-database_name = "capstone"
-database_path = 'postgres://marshall@localhost:5432/{}'.format(database_name)
+# database_name = "capstone"
+# database_path = 'postgres://marshall@localhost:5432/{}'.format(database_name)
+database_path = os.environ.get('DATABASE_URL')
 
 
 db = SQLAlchemy()

@@ -168,7 +168,7 @@ def create_app(test_config=None):
 
     @app.route('/casting', methods=['POST'])
     @requires_auth('post:cast')
-    def create_cast():
+    def create_cast(token):
         try:
             body = request.get_json()
 
