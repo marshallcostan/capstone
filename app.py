@@ -188,7 +188,8 @@ def create_app(test_config=None):
 
             return jsonify({
                 'success': True,
-                'cast member added': f" {actor.name} added to the {movie.title} cast."
+                'cast member added': f" {actor.name} added to the "
+                                     f"{movie.title} cast."
             })
         except():
             abort(400)

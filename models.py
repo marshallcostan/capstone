@@ -29,7 +29,8 @@ def drop_db(app, database_path=database_path):
     db.create_all()
 
 
-casting = db.Table('casting', Column('movie_id', db.Integer, db.ForeignKey('Movies.id')),
+casting = db.Table('casting', Column('movie_id', db.Integer,
+                                     db.ForeignKey('Movies.id')),
                    Column('actor_id', db.Integer, db.ForeignKey('Actors.id'))
                    )
 
